@@ -3,7 +3,7 @@
 require_once 'common-functions.php';
 require_once 'vendor/php-test-framework/public-api.php';
 
-const PROJECT_DIRECTORY = '';
+const PROJECT_DIRECTORY = 'C:\Users\ajefi\icd0007';
 
 function findsDaysUnderTargetTemperature() {
 
