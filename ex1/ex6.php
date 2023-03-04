@@ -1,7 +1,7 @@
 <?php
 
-$inputFile = fopen("data/temperatures-sample.csv", "r");
-$outputFile = fopen("temperatures-filtered.csv", "w");
+$inputFile = fopen(__DIR__ . "/data/temperatures-sample.csv", "r");
+$outputFile = fopen(__DIR__ . "/temperatures-filtered.csv", "w");
 
 while (!feof($inputFile)) {
     $dict = fgetcsv($inputFile);
