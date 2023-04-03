@@ -1,5 +1,14 @@
 <?php
 
+$message = "";
+if (isset($_GET['success']) && $_GET['success'] == '1') {
+    $message = "Raamatu lisamine õnnestus!";
+} else if (isset($_GET['success']) && $_GET['success'] == '2') {
+    $message = "Updated!";
+}else if (isset($_GET['success']) && $_GET['success'] == '3') {
+    $message = "Kustutatud!";
+}
+
 $data = file_get_contents('books.txt');
 
 $lines = explode("\n", $data);
@@ -7,13 +16,13 @@ $lines = explode("\n", $data);
 $html = '';
 foreach ($lines as $line) {
     if (!empty($line)) {
-        list($title, $author, $grade) = explode('|', $line);
+        list($id, $title, $author, $grade) = explode('|', $line);
 
-        $title = base64_decode($title);
-        $author = base64_decode($author);
-
+        $title = htmlspecialchars_decode($title);
+        $author = htmlspecialchars_decode($author);
+        $id = urlencode($id);
         $html .= "<tr>";
-        $html .= "<td width='33%'>$title</td>";
+        $html .= "<td width='33%'> <a href='book-edit.php?id=$id'>$title</a></td>";
         $html .= "<td width='33%'>$author</td>";
         $html .= "<td width='33%'>$grade</td>";
         $html .= "</tr>";
@@ -43,6 +52,11 @@ foreach ($lines as $line) {
                             <tr>
                                 <td>
                                     <?php include 'menu.php'; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="message-block">
+                                    <?php echo $message; ?>
                                 </td>
                             </tr>
                         </table>

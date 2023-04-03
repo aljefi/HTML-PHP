@@ -2,16 +2,26 @@
 
 include_once 'functions.php';
 
+$firstName = $_POST['firstName'] ?? "";
+$lastName = $_POST['lastName'] ?? "";
+$grade = $_POST['grade'] ?? "";
+$message = "";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-    $grade = $_POST['grade'] ?? " ";
+    if (strlen($firstName) < 1 || strlen($firstName) > 21) {
+        $message = "Eesnimi peab olema vähemalt 1 ja mitte rohkem kui 21 tähemärki pikk.";
+    } else if (strlen($lastName) < 2 || strlen($lastName) > 22) {
+        $message .= "\n";
+        $message .= "Perekonnanimi peab olema vähemalt 2 ja mitte rohkem kui 22 tähemärki pikk.";
+    }
 
+    if ($message == "") {
+        add_author(htmlspecialchars($firstName), htmlspecialchars($lastName), $grade);
 
-    add_author(base64_encode($firstName), base64_encode($lastName), $grade);
+        header('Location: author-list.php?success=1');
+        exit();
+    }
 
-    header('Location: author-list.php');
-    exit();
 }
 
 ?>
@@ -37,6 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </td>
                     </tr>
                     <tr>
+                        <td id="error-block">
+                            <?php echo $message; ?>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>
                             <br>
 
@@ -46,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         Eesnimi:
                                     </td>
                                     <td>
-                                        <input type="text" name="firstName"> <br>
+                                        <input type="text" name="firstName" value="<?= $firstName ?>"> <br>
                                     </td>
                                 </tr>
                                 <tr>
@@ -54,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         Perekonnanimi:
                                     </td>
                                     <td>
-                                        <input type="text" name="lastName"> <br>
+                                        <input type="text" name="lastName" value="<?= $lastName ?>"> <br>
                                     </td>
                                 </tr>
                                 <tr>
@@ -62,11 +77,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         Hinne:
                                     </td>
                                     <td>
-                                        <input type="radio" name="grade" value="1">1
-                                        <input type="radio" name="grade" value="2">2
-                                        <input type="radio" name="grade" value="3">3
-                                        <input type="radio" name="grade" value="4">4
-                                        <input type="radio" name="grade" value="5">5
+                                        <input type="radio" name="grade"
+                                               value="1" <?php echo $grade == 1 ? 'checked' : '' ?>>1
+                                        <input type="radio" name="grade"
+                                               value="2" <?php echo $grade == 2 ? 'checked' : '' ?>>2
+                                        <input type="radio" name="grade"
+                                               value="3" <?php echo $grade == 3 ? 'checked' : '' ?>>3
+                                        <input type="radio" name="grade"
+                                               value="4" <?php echo $grade == 4 ? 'checked' : '' ?>>4
+                                        <input type="radio" name="grade"
+                                               value="5" <?php echo $grade == 5 ? 'checked' : '' ?>>5
                                     </td>
                                 </tr>
                                 <tr>
