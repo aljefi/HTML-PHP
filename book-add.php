@@ -1,23 +1,26 @@
 <?php
 
 include_once 'functions.php';
-$id = $_GET['id'] ?? null;
+include_once 'connection.php';
+$authorId = $_GET['id'] ?? null;
 $title = '';
-$author = '';
+$author1Id = '';
+$author2Id = '';
 $grade = '';
 $isRead = '';
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = $_POST['title'] ?? "";
-    $author = $_POST['author'] ?? "";
-    $grade = $_POST['grade'] ?? "";
-    $isRead = isset($_POST['isRead']) ? 'yes' : 'no';
+    $title = $_POST['title'] ?? null;
+    $author1Id = $_POST['author1'] ?? null;
+    $author2Id = $_POST['author2'] ?? null;
+    $grade = $_POST['grade'] ?? null;
+    $isRead = $_POST['isRead'] ?? 0;
     if (strlen($title) < 3 || strlen($title) > 23) {
         $message = "Pealkiri peab olema vähemalt 3 ja mitte rohkem kui 23 tähemärki pikk.";
     }
 
     if ($message == "") {
-        add_book(htmlspecialchars($title), htmlspecialchars($author), $grade, $isRead);
+        add_book($title, $author1Id, $author2Id, $grade, $isRead);
         header('Location: index.php?success=1');
         exit();
     }
@@ -61,6 +64,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <td><input type="text" name="title" value="<?= $title ?>"> <br>
                                     </td>
                                 </tr>
+
+                                <tr>
+                                    <td width="12%">Author 1:</td>
+                                    <td>
+                                        <select id="author1" name="author1">
+                                            <option value="">Select an author</option>
+                                            <?php
+                                            // retrieve list of authors from database
+                                            $conn = getConnection();
+                                            $stmt = $conn->prepare("select * from authors");
+                                            $stmt->execute();
+                                            $authors = $stmt->fetchAll();
+                                            // loop through the list and create option elements
+                                            foreach ($authors as $author) {
+                                                $authorId = $author['id'];
+                                                $authorName = $author['firstname'] . ' ' . $author['lastname'];
+                                                echo "<option value='$authorId'>$authorName</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td width="12%">Author 2:</td>
+                                    <td>
+                                        <select id="author2" name="author2">
+                                            <option value="">Select an author</option>
+                                            <?php
+                                            $conn = getConnection();
+                                            $stmt = $conn->prepare("select * from authors");
+                                            $stmt->execute();
+                                            $authors = $stmt->fetchAll();
+                                            foreach ($authors as $author) {
+                                                $authorId = $author['id'];
+                                                $authorName = $author['firstname'] . ' ' . $author['lastname'];
+                                                echo "<option value='$authorId'>$authorName</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </td>
+                                </tr>
+
                                 <tr>
                                     <td width="12%">Hinne:</td>
                                     <td>
@@ -79,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <tr>
                                     <td width="12%">Loetud:</td>
                                     <td><input type="checkbox" name="isRead"
-                                               value="yes" <?php echo $isRead == 'yes' ? 'checked' : ''; ?>>
+                                               value="1" <?php echo $isRead == 'yes' ? 'checked' : ''; ?>>
                                         <br></td>
                                 </tr>
                                 <tr>

@@ -1,10 +1,11 @@
 <?php
 
 include_once 'functions.php';
+include_once 'connection.php';
 
 $firstName = $_POST['firstName'] ?? "";
 $lastName = $_POST['lastName'] ?? "";
-$grade = $_POST['grade'] ?? "";
+$grade = $_POST['grade'] ?? null;
 $message = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

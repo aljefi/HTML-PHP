@@ -1,26 +1,33 @@
 <?php
+include_once 'connection.php';
 
 $message = "";
 if (isset($_GET['success']) && $_GET['success'] == '1') {
     $message = "Raamatu lisamine õnnestus!";
 } else if (isset($_GET['success']) && $_GET['success'] == '2') {
     $message = "Updated!";
-}else if (isset($_GET['success']) && $_GET['success'] == '3') {
+} else if (isset($_GET['success']) && $_GET['success'] == '3') {
     $message = "Kustutatud!";
 }
 
-$data = file_get_contents('books.txt');
+$conn = getConnection();
+$stmt = $conn->prepare("
+SELECT books.id, books.title, GROUP_CONCAT(CONCAT(authors.firstname, ' ', authors.lastname) SEPARATOR ', ') AS authors, books.grade, books.is_read
+FROM books
+LEFT JOIN books_authors ON books.id = books_authors.book_id
+LEFT JOIN authors ON authors.id = books_authors.author_id
+GROUP BY books.id;
+");
 
-$lines = explode("\n", $data);
-
+$stmt->execute();
+$books = $stmt->fetchAll();
 $html = '';
-foreach ($lines as $line) {
-    if (!empty($line)) {
-        list($id, $title, $author, $grade) = explode('|', $line);
-
-        $title = htmlspecialchars_decode($title);
-        $author = htmlspecialchars_decode($author);
-        $id = urlencode($id);
+foreach ($books as $book) {
+    if (!empty($book)) {
+        $title = htmlspecialchars_decode($book['title']);
+        $author = isset($book['authors']) ? htmlspecialchars_decode($book['authors']) : '';
+        $id = urlencode($book['id']);
+        $grade = $book['grade'];
         $html .= "<tr>";
         $html .= "<td width='33%'> <a href='book-edit.php?id=$id'>$title</a></td>";
         $html .= "<td width='33%'>$author</td>";
@@ -40,15 +47,15 @@ foreach ($lines as $line) {
 <body id="book-list-page">
 
 
-<table border="1" width="100%">
+<table border="0" width="100%">
     <tr>
         <td></td>
         <td width="800px">
-            <table border="1" width="100%">
+            <table border="0" width="100%">
                 <tr>
                     <td>
 
-                        <table border="1" width="100%">
+                        <table border="0" width="100%">
                             <tr>
                                 <td>
                                     <?php include 'menu.php'; ?>
@@ -66,7 +73,7 @@ foreach ($lines as $line) {
                 <tr>
                     <td>
                         <br>
-                        <table border="1" width="100%">
+                        <table border="0" width="100%">
                             <tr>
                                 <td width="33%">
                                     Pealkiri
@@ -92,7 +99,7 @@ foreach ($lines as $line) {
                     <td>
 
                         <br>
-                        <table border="1" width="100%">
+                        <table border="0" width="100%">
                             <tr>
                                 <td width="33%">ICD0007 Näidisrakendus</td>
                             </tr>

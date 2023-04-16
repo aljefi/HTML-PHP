@@ -1,4 +1,5 @@
 <?php
+include_once 'connection.php';
 
 $message = "";
 if (isset($_GET['success']) && $_GET['success'] == '1') {
@@ -9,17 +10,19 @@ if (isset($_GET['success']) && $_GET['success'] == '1') {
     $message = "Kustutatud!";
 }
 
-$data = file_get_contents('authors.txt');
+$conn = getConnection();
+$stmt = $conn->prepare("SELECT * from authors;");
 
-$lines = explode("\n", $data);
+$stmt->execute();
+$authors = $stmt->fetchAll();
 
 $html = '';
-foreach ($lines as $line) {
-    if (!empty($line)) {
-        list($id, $firstName, $lastName, $grade) = explode('|', $line);
-
-        $firstName = htmlspecialchars_decode($firstName);
-        $lastName = htmlspecialchars_decode($lastName);
+foreach ($authors as $author) {
+    if (!empty($author)) {
+        $id = $author['id'];
+        $firstName = ($author['firstname']);
+        $lastName = ($author['lastname']);
+        $grade = $author['grade'];
 
         $html .= "<tr>";
         $html .= "<td width='33%'> <a href='author-edit.php?id=$id'>$firstName</a></td>";
@@ -64,16 +67,6 @@ foreach ($lines as $line) {
                                 <td>Nimi</td>
                                 <td>Perekonnanimi</td>
                                 <td>Hinne</td>
-                            </tr>
-                            <tr>
-                                <td>Elisabeth</td>
-                                <td>Robson</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <td>Eric</td>
-                                <td>Freeman</td>
-                                <td>5</td>
                             </tr>
                             <?php echo $html; ?>
                         </table>

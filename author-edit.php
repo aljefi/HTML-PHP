@@ -1,17 +1,17 @@
 <?php
-
+include_once 'connection.php';
 include_once 'functions.php';
 $id = $_GET['id'] ?? null;
 $message = '';
 
-$author = find_author_by_id($id);
-$firstName = $author["firstName"];
-$lastName = $author["lastName"];
+$author = getAuthorById($id);
+$firstName = $author["firstname"];
+$lastName = $author["lastname"];
 $grade = $author["grade"];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['deleteButton'])) {
-        delete_item(AUTHORS_FILE, $id);
+        deleteAuthor( $id);
         header('Location: author-list.php?success=3');
         exit();
     }
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <form action="author-edit.php?id=<?= $id ?>" method="post">
 
-    <input type="hidden" name="id" value="<?= $id ?>">
+<!--    <input type="hidden" name="id" value="--><?php //= $id ?><!--">-->
 
     <?php include 'menu.php'; ?>
 
