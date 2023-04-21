@@ -39,13 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? "";
     $author1Id = $_POST['author1'] ?? null;
     $author2Id = $_POST['author2'] ?? null;
-    $grade = $_POST['grade'] ?? 0;
+    $grade = $_POST['grade'] ?? null;
     $isRead = $_POST['isRead'] ?? 0;
     $isRead = intval($isRead);
     if (strlen($title) < 3 || strlen($title) > 23) {
         $message = "Pealkiri peab olema vähemalt 3 ja mitte rohkem kui 23 tähemärki pikk.";
     } else {
-        update_book($id, htmlspecialchars($title), $author1Id, $author2Id,  $grade, $isRead);
+        update_book($id, $title, $author1Id, $author2Id,  $grade, $isRead);
         header('Location: index.php?success=2');
         exit();
     }

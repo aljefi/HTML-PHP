@@ -4,45 +4,46 @@ include_once 'connection.php';
 function add_book($title, $author1Id, $author2Id, $grade, $isRead): void
 {
     $conn = getConnection();
-    $stmt = $conn->prepare("INSERT INTO books (title, grade, is_read) VALUES (?, ?, ?)");
-    $stmt->execute([$title, $grade, $isRead]);
+    $stmt = $conn->prepare("INSERT INTO books (title, grade, is_read) VALUES (:title, :grade, :isRead)");
+    $stmt->bindParam(':title', $title);
+    $grade = intval($grade);
+    $stmt->bindParam(':grade', $grade);
+    if ($isRead != null){
+        $isRead = boolval($isRead);
+    }
+    $stmt->bindParam(':isRead', $isRead);
+    $stmt->execute();
 
     $last_id = $conn->lastInsertId();
+
     if (!empty($author1Id)) {
-        $stmt = $conn->prepare("INSERT INTO books_authors (book_id, author_id) VALUES (?, ?)");
-        $stmt->execute([$last_id, $author1Id]);
+        $stmt = $conn->prepare("INSERT INTO books_authors (book_id, author_id) VALUES (:last_id, :author1Id)");
+        $stmt->bindParam(':last_id', $last_id);
+        $author1Id = intval($author1Id);
+        $stmt->bindParam(':author1Id', $author1Id);
+        $stmt->execute();
     }
+
     if (!empty($author2Id)) {
-        $stmt = $conn->prepare("INSERT INTO books_authors (book_id, author_id) VALUES (?, ?)");
-        $stmt->execute([$last_id, $author2Id]);
+        $stmt = $conn->prepare("INSERT INTO books_authors (book_id, author_id) VALUES (:last_id, :author2Id)");
+        $stmt->bindParam(':last_id', $last_id);
+        $stmt->bindParam(':author2Id', $author2Id);
+        $stmt->execute();
     }
 }
 
 function add_author($firstName, $lastName, $grade): void
 {
     $conn = getConnection();
-    $stmt = $conn->prepare("INSERT INTO authors (firstName, lastname, grade) VALUES (?, ?, ?)");
-    $stmt->execute([$firstName, $lastName, $grade]);
-}
-
-
-function find_book_by_id($id): ?array
-{
-    $conn = getConnection();
-    $stmt = $conn->prepare("
-select books.title, concat(authors.firstname , ' ', authors.lastname)
-    from books_authors 
-    join books on books.id = books_authors.book_id
-    join authors on authors.id=books_authors.author_id
-                                    where id = :id");
-    $stmt->bindParam(':id', $id);
+    $stmt = $conn->prepare("INSERT INTO authors (firstname, lastname, grade) VALUES (:firstName, :lastName, :grade)");
+    $stmt->bindParam('firstName', $firstName);
+    $stmt->bindParam('lastName', $lastName);
+    $grade = intval($grade);
+    $stmt->bindParam('grade', $grade);
     $stmt->execute();
-    $book = $stmt->fetch();
-    return $book ?: null;
 }
 
-
-function update_book(int $id, string $title, int $author1Id, int $author2Id, int $grade, int $isRead): void
+function update_book($id, $title, $author1Id, $author2Id, $grade, $isRead): void
 {
     $conn = getConnection();
     $stmt = $conn->prepare("UPDATE books SET title = ?, grade = ?, is_read = ? WHERE id = ?");
@@ -50,11 +51,11 @@ function update_book(int $id, string $title, int $author1Id, int $author2Id, int
     $stmt = $conn->prepare("DELETE FROM books_authors WHERE book_id = ?");
     $stmt->execute([$id]);
 
-    if (($author1Id) != null) {
+    if ($author1Id !== "") {
         $stmt = $conn->prepare("INSERT INTO books_authors (book_id, author_id) VALUES (?, ?)");
         $stmt->execute([$id, $author1Id]);
     }
-    if (($author2Id) != null) {
+    if ($author2Id !== "") {
         $stmt = $conn->prepare("INSERT INTO books_authors (book_id, author_id) VALUES (?, ?)");
         $stmt->execute([$id, $author2Id]);
     }
@@ -75,7 +76,6 @@ function getBookById($id): array
     $stmt->execute();
     return $stmt->fetch();
 }
-
 
 function getAuthorById($id): array
 {
@@ -121,9 +121,3 @@ function deleteAuthor($id): void
     $stmt->bindParam(':id', $id);
     $stmt->execute();
 }
-
-//$id = 1;
-//$book = getBooksAuthorsById($id);
-//var_dump($book[0]);
-//$a = (getAuthorById($book[0][$id])['firstname']);
-//var_dump($a);

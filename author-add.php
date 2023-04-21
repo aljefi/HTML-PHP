@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if ($message == "") {
-        add_author(htmlspecialchars($firstName), htmlspecialchars($lastName), $grade);
+        add_author($firstName, $lastName, $grade);
 
         header('Location: author-list.php?success=1');
         exit();

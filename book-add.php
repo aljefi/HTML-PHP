@@ -10,14 +10,15 @@ $grade = '';
 $isRead = '';
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = $_POST['title'] ?? null;
-    $author1Id = $_POST['author1'] ?? null;
-    $author2Id = $_POST['author2'] ?? null;
+    $title = ($_POST['title']) ?? null;
+    $author1Id = ($_POST['author1']) ?? null;
+    $author2Id = ($_POST['author2']) ?? null;
     $grade = $_POST['grade'] ?? null;
     $isRead = $_POST['isRead'] ?? 0;
-    if (strlen($title) < 3 || strlen($title) > 23) {
-        $message = "Pealkiri peab olema vähemalt 3 ja mitte rohkem kui 23 tähemärki pikk.";
-    }
+//    if (strlen($title) < 3 || strlen($title) > 23) {
+//        var_dump($title);
+//        $message = "Pealkiri peab olema vähemalt 3 ja mitte rohkem kui 23 tähemärki pikk.";
+//    }
 
     if ($message == "") {
         add_book($title, $author1Id, $author2Id, $grade, $isRead);
