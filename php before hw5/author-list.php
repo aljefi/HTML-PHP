@@ -54,7 +54,6 @@ foreach ($authors as $author) {
                 </tr>
                 <tr>
                     <td id="message-block">
-
                         <?php echo $message; ?>
                     </td>
                 </tr>

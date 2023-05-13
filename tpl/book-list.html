@@ -1,0 +1,28 @@
+<table border="0" width="100%">
+    <tr>
+        <td width="33%">
+            Pealkiri
+        </td>
+        <td width="33%">
+            Autorid
+        </td>
+        <td width="33%">
+            Hinne
+        </td>
+    </tr>
+    <tpl tpl-foreach="$books as $book">
+        <tr>
+            <td width="33%">
+                <a href="?cmd=show_book_edit&id={{ $book->id }}">{{ $book->title }}</a>
+            </td>
+            <td width="33%">
+                <tpl tpl-foreach="$book->authors as $author">{{ $author->firstName }} {{ $author->lastName }}
+                    <tpl tpl-if="!$last">,</tpl>
+                </tpl>
+            </td>
+            <td width="33%">
+                {{ $book->grade }}
+            </td>
+        </tr>
+    </tpl>
+</table>

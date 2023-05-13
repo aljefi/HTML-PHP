@@ -1,0 +1,22 @@
+<table border="1" width="100%">
+    <tr>
+        <td>Nimi</td>
+        <td>Perekonnanimi</td>
+        <td>Hinne</td>
+    </tr>
+    <tr>
+        <tpl tpl-foreach="$authors as $author">
+            <tr>
+                <td width="33%">
+                    <a href="?cmd=show_author_edit&id={{ $author->id }}">{{ $author->firstName }}</a>
+                </td>
+                <td width="33%">
+                    {{ $author->lastName }}
+                </td>
+                <td width="33%">
+                    {{ $author->grade }}
+                </td>
+            </tr>
+        </tpl>
+    </tr>
+</table>

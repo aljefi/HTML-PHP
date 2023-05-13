@@ -1,34 +1,3 @@
-<?php
-
-include_once 'functions.php';
-include_once 'connection.php';
-$authorId = $_GET['id'] ?? null;
-$title = '';
-$author1Id = '';
-$author2Id = '';
-$grade = '';
-$isRead = '';
-$message = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = ($_POST['title']) ?? null;
-    $author1Id = ($_POST['author1']) ?? null;
-    $author2Id = ($_POST['author2']) ?? null;
-    $grade = $_POST['grade'] ?? null;
-    $isRead = $_POST['isRead'] ?? 0;
-//    if (strlen($title) < 3 || strlen($title) > 23) {
-//        var_dump($title);
-//        $message = "Pealkiri peab olema vähemalt 3 ja mitte rohkem kui 23 tähemärki pikk.";
-//    }
-
-    if ($message == "") {
-        add_book($title, $author1Id, $author2Id, $grade, $isRead);
-        header('Location: index.php?success=1');
-        exit();
-    }
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,8 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </td>
                     </tr>
                     <tr>
-                        <td id="error-block">
-                            <?php echo $message; ?>
+                        <td id="error-block" tpl-if="$errors">
+                            <tpl tpl-foreach="$errors as $error">
+                                <strong>{{ $error }}</strong><br>
+                            </tpl>
                         </td>
                     </tr>
                     <tr>
@@ -62,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <table border="0" width="75%" align="center">
                                 <tr>
                                     <td width="12%">Pealkiri:</td>
-                                    <td><input type="text" name="title" value="<?= $title ?>"> <br>
+                                    <td><input type="text" name="title" value="{{ $book->title }}"> <br>
                                     </td>
                                 </tr>
 

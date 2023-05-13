@@ -1,0 +1,62 @@
+<ul class="alert" tpl-if="$error">
+    <li>{{ $message }}</li>
+</ul>
+<form method="post">
+    <table border="0" width="75%" align="center">
+        <tr>
+            <td width="12%">Pealkiri:</td>
+            <td><input type="text" name="title" value="{{ $book->title }}"> <br>
+            </td>
+        </tr>
+
+        <tr>
+            <td width="12%">Author 1:</td>
+            <td>
+                <select id="author1" name="author1">
+                    <option value="{{$author1->id}}">{{ $author1->firstName }} {{ $author1->lastName }}</option>
+                    <tpl tpl-foreach="$authors as $author">
+                        <tpl tpl-if="$author1->id != $author->id ">
+                            <option value="{{ $author->id }}">{{ $author->firstName }} {{ $author->lastName }}</option>
+                        </tpl>
+                    </tpl>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td width="12%">Author 2:</td>
+            <td>
+                <select id="author2" name="author2">
+                    <option value="{{$author2->id}}">{{ $author2->firstName }} {{ $author2->lastName }}</option>
+                    <tpl tpl-foreach="$authors as $author" tpl-trim-contents>
+                        <tpl tpl-if="$author2->id != $author->id ">
+                            <option value="{{ $author->id }}">{{ $author->firstName }} {{ $author->lastName }}</option>
+                        </tpl>
+                    </tpl>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td width="12%">Hinne:</td>
+            <td>
+                <tpl tpl-foreach="range(1, 5) as $i">
+                    <input type="radio"
+                           id="grade{{ $i }}"
+                           name="grade"
+                           value="{{ $i }}"
+                           tpl-checked="$i === $book->grade">
+                    <label for="grade{{ $i }}">{{ $i }}</label>
+                </tpl>
+            </td>
+        </tr>
+        <tr>
+            <td width="12%">Loetud:</td>
+            <td><input type="checkbox" name="isRead" value="yes" tpl-checked="$book->isRead"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td align="right"><input name="submitButton" type="submit" value="Salvesta"></td>
+        </tr>
+    </table>
+</form>

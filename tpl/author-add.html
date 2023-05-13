@@ -1,0 +1,34 @@
+<ul class="alert" tpl-if="$error">
+    <li>{{ $message }}</li>
+</ul>
+<form method="post">
+    <table border="0" width="75%" align="center">
+        <tr>
+            <td width="12%">Eesnimi:</td>
+            <td><input type="text" name="firstName" value="{{ $firstName }}"><br>
+            </td>
+        </tr>
+        <tr>
+            <td width="12%">Perenimi:</td>
+            <td><input type="text" name="lastName" value="{{ $lastName }}"><br>
+            </td>
+        </tr>
+        <tr>
+            <td width="12%">Hinne:</td>
+            <td class="score-empty">
+                <tpl tpl-foreach="range(1, 5) as $i" tpl-trim-contents>
+                    <input type="radio"
+                           id="grade{{ $i }}"
+                           name="grade"
+                           value="{{ $i }}"
+                           tpl-checked="$i == $grade">
+                    <label for="grade{{ $i }}">{{ $i }}</label>
+                </tpl>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td align="right"><input name="submitButton" type="submit" value="Salvesta"></td>
+        </tr>
+    </table>
+</form>
