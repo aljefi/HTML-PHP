@@ -1,0 +1,16 @@
+Eksami alguses peaksite käivitama käsu
+
+  java -jar monitor.jar <teie Bitbucket-i workspace ID>
+
+  (olles kataloogis, kuhu te projekti kloonisite).
+
+See programm esitab teie töö automaatselt. Soovitatav on kontrollida
+(nupp "Show Uploaded Data"), kas see ka nii on.
+
+Küsimused laeb monitor alla (faili questions.txt) siis, kui esimene ekraanitõmmis
+on üles saadetud.
+
+Aega on 100 minutit. Arvesse läheb seis, mis on esitatud enne kella ...
+
+Teooriaküsimustele saate vastata 15 minuti jooksul alates eksami algusest (...).
+Muudatused, mis on tehtud hiljem kui ... ei lähe arvesse.

@@ -1,0 +1,140 @@
+Teooriaküsimused
+
+  Vastused kirjutage siia samasse faili küsimuse alla.
+  Iga küsimuse vastus peab jääma alla 200 märgi.
+  Iga küsimus annab kuni 4 punkti.
+
+  1. Alloleva CSS klassi nimi (blue-border) ei ole hea. Miks?
+
+        .blue-border { border: 3px solid blue; }
+
+     ... vastus tuleb siia ...
+
+  2. Soovime salvestada teksti faili isikute andmed kujul <eesnimi>;<perekonnanimi>
+     (iga kirje kohta on üks rida). Soovitatav on andmed enne faili salvestamist
+     töödelda (nt. funktsiooniga urlencode()). Miks?
+
+     ... vastus tuleb siia ...
+
+  3. Linkides ei peaks kasutama absoluutseid aadresse. Miks?
+
+     ... vastus tuleb siia ...
+
+  4. Andmete faili kirjutamisel lisatakse tihti igale kirjele unkaalne identifikaator (id)
+     Miks?
+
+     ... vastus tuleb siia ...
+
+Ülesanne 1 (6 punkti)
+
+  Html failide struktuur asub kataloogis "ex1".
+
+  Kirjutage järgmised relatiivsed lingid:
+
+     index.html -> a.html (failis index.html on link, mis viitab failile a.html)
+     a.html -> e.html
+     e.html -> d.html
+     d.html -> b.html
+
+   Kirjutage fails f.html olevale lingile nimega "shortest self" lühim
+   võimalik link failile f.html.
+
+   Kirjutage fails f.html olevale lingile nimega "shortest f/index.html" lühim
+   võimalik link failile "/a/b/c/d/e/f/index.html".
+
+  Lahenduse kontrollimiseks on test ex1/tests.php
+  Test eeldab, et failid on saadaval aadressilt http://localhost:8080/ex1/
+  Seega testi kasutamiseks käivitage enne php server projekti juuraktaloogist (php -S localhost:8080).
+
+Ülesanne 2 (8 punkti)
+
+  Failis css/css.html on numbrid 1-5. Muutke faili styles.css nii, et
+  täidetud oleks allolevad tingimused.
+
+     • 1 on roheline ja italic
+     • 2 on punane ja mitte italic
+     • 3 on roheline ja italic
+     • 4 on sinine ja italic
+     • 5 on sinine ja italic
+
+  Muuta võite ainult kommentaariga märgitud kohti.
+  Faili css.html muuta ei tohi.
+
+Ülesanne 3 (20 punkti)
+
+  Failis ex3/index.php on osa rakendusest, mille peate lõpuni kirjutama.
+
+  NB! Lahendus peab läbima testid failist ex3/tests.php.
+      Kogu kood läheb faili ex3/index.php.
+
+  Rakendus näitab kahte nimekirja (select box) numbritest ja nuppe, mis võimaldavad
+  numbreid ühest nimekirjast teise liigutada.
+
+  Kui vajutada valida number esimesest nimekirjast ja vajutada nupule ">>", siis
+  eemaldatakse number esimesest nimekirjast ja lisatakse teise.
+
+  Kui vajutada valida number teisest nimekirjast ja vajutada nupule "<<", siis
+  eemaldatakse number teisest nimekirjast ja lisatakse esimesse.
+
+  Esialgne seis on muutujates $list1 ja $list2.
+
+  Kirjutage puuduvad osad, et rakendus tööle hakkaks.
+
+  Infoks:
+    Te peate programmi seisu iga päringuga edasi kandma.
+    Infot saate hoida vormi "hidden" väljaldel.
+
+    serialize() - transformeerib listi teksti kujule.
+    unserialize() - transformeerib teksti tagasi listiks.
+
+    index.php failis on ka abifunktsioon removeElementByValue($value, $array),
+    mis eemaldab ette antud listist ette antud elemendi ja tagastab listi,
+    millest on element eemaldatud.
+
+Ülesanne 4 (10 punkti)
+
+   Failis ex4/data.sql on tablelid ja andmed menüü punktide kohta.
+
+   Menüü punktidel võib ka alampunkte olla.
+
+   Antud andmete struktuur on järgmine:
+
+   Item 1
+      Item 1.1
+      Item 1.2
+   Item 2
+      Item 2.1
+         Item 2.1.1
+
+  Failis ex4/menu.php on kood, mis teeb andmebaasi ühenduse ja käivitab failis data.sql
+  olevad SQL laused. Ka andmete küsimise päring on teie eest valmis kirjutatud ja seda tee
+  muuta ei tohi.
+
+  Kirjutage funktsioon getMenu(), mis teeb andmebaasist saadud ridade põhjal MenuItem tüüpi objektid
+  (failis menu/MenuItem.php). Funktsioon peaks tagastama listi MenuItem objektidega.
+
+  Võite arvestada, et andmed on sellises järjestuses, et alampunkt ei
+  ole kunagi enne ülempunkti.
+
+  NB! Lahendus peab läbima testid failist ex4/tests.php.
+      Muuta võite ainult faili ex4/ex4.php.
+
+  Menüü struktuuri loomise näide:
+
+     $item1 = new MenuItem(1, 'Item 1');
+
+     teeb menüü punkti id-ga 1 ja nimega 'Item 1'
+
+     $item1->addSubItem(new MenuItem(2, 'Item 1.1'));
+
+     lisab esimesele menüüpunktile alampunkti.
+
+  Menüü printimiseks on abifunktsioon printMenu();
+
+  Andmebaasina kasutatakse mälupõhist andmebaasi ja on võimalik, et teie Php seadistuses
+  pole vastavat draiverit automaatselt laetud. Sellisel juhul peaksite koodi käivitama nii:
+    php -d extension=pdo_sqlite ex4/menu.php
+
+    Ja testid nii:
+
+    php -d extension=pdo_sqlite ex4/tests.php

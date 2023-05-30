@@ -1,0 +1,14 @@
+
+p, .a, div.c{
+    color: blue;
+    font-style: italic;
+}
+
+* {
+    color: red;
+    font-style: normal;
+}
+
+.a {
+    color: green;
+}
